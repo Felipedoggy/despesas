@@ -1,10 +1,13 @@
 CREATE DATABASE IF NOT EXISTS despesasdb;
+
 USE despesasdb;
 
 CREATE TABLE IF NOT EXISTS despesas (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  descricao VARCHAR(255),
-  valor DECIMAL(10,2),
-  tipo VARCHAR(50),
-  data DATE
+  descricao VARCHAR(255) NOT NULL,
+  valor DECIMAL(10, 2) NOT NULL,
+  tipo VARCHAR(50) NOT NULL,
+  data DATE NOT NULL,
+  observacao TEXT NULL
 );
+  

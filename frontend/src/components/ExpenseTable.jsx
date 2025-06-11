@@ -1,6 +1,6 @@
 import React from "react";
 
-function ExpenseTable({ expenses, onDelete }) {
+function ExpenseTable({ expenses, onDelete, onEdit }) {
   return (
     <div className="card shadow">
       <table className="table table-hover mb-0">
@@ -20,10 +20,25 @@ function ExpenseTable({ expenses, onDelete }) {
               <td>{e.descricao}</td>
               <td>R$ {parseFloat(e.valor).toFixed(2)}</td>
               <td>{e.tipo}</td>
-              <td>{e.data}</td>
-              <td>{e.observacao}</td>
               <td>
-                <button className="btn btn-sm btn-danger" onClick={() => onDelete(e.id)}>
+                {new Date(e.data).toLocaleDateString("pt-BR", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "2-digit",
+                })}
+              </td>
+              <td>{e.observacao || "-"}</td>
+              <td>
+                <button
+                  className="btn btn-sm btn-primary me-2"
+                  onClick={() => onEdit(e)}
+                >
+                  Editar
+                </button>
+                <button
+                  className="btn btn-sm btn-danger"
+                  onClick={() => onDelete(e.id)}
+                >
                   Excluir
                 </button>
               </td>

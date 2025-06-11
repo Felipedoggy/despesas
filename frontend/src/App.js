@@ -10,7 +10,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 function App() {
   const [expenses, setExpenses] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  //const [filters, setFilters] = useState({ tipo: "", data: "" });
+  const [editingExpense, setEditingExpense] = useState(null);
 
   const fetchExpenses = async () => {
     const response = await api.get("/despesas");
@@ -27,6 +27,12 @@ function App() {
     fetchExpenses();
   };
 
+  const updateExpense = async (expense) => {
+    await api.put(`/despesas/${expense.id}`, expense);
+    setEditingExpense(null);
+    fetchExpenses();
+  };
+
   const deleteExpense = async (id) => {
     await api.delete(`/despesas/${id}`);
     fetchExpenses();
@@ -39,14 +45,33 @@ function App() {
     setFiltered(dataFiltrada);
   };
 
+  // Ação chamada ao clicar no botão editar da tabela
+  const handleEdit = (expense) => {
+    setEditingExpense(expense);
+  };
+
+  // Cancelar edição
+  const handleCancelEdit = () => {
+    setEditingExpense(null);
+  };
+
   return (
     <div className="d-flex flex-column min-vh-100">
       <Navbar />
       <main className="flex-fill container my-4">
         <h2 className="mb-4">Gerenciar Despesas</h2>
-        <ExpenseForm onAdd={addExpense} />
+        <ExpenseForm
+          onAdd={addExpense}
+          onUpdate={updateExpense}
+          expense={editingExpense}
+          onCancel={handleCancelEdit}
+        />
         <Filter onFilter={handleFilter} />
-        <ExpenseTable expenses={filtered} onDelete={deleteExpense} />
+        <ExpenseTable
+          expenses={filtered}
+          onDelete={deleteExpense}
+          onEdit={handleEdit} // passa a função para o ExpenseTable
+        />
       </main>
       <Footer />
     </div>
