@@ -38,12 +38,23 @@ function App() {
     fetchExpenses();
   };
 
-  const handleFilter = ({ tipo, data }) => {
-    let dataFiltrada = [...expenses];
-    if (tipo) dataFiltrada = dataFiltrada.filter(e => e.tipo === tipo);
-    if (data) dataFiltrada = dataFiltrada.filter(e => e.data === data);
-    setFiltered(dataFiltrada);
-  };
+const handleFilter = ({ tipo, data }) => {
+  let dataFiltrada = [...expenses];
+
+  if (tipo) dataFiltrada = dataFiltrada.filter(e => e.tipo === tipo);
+
+  if (data) {
+    dataFiltrada = dataFiltrada.filter(e => {
+      const eData = new Date(e.data);
+      // extrai string no formato yyyy-mm-dd para comparação
+      const eDataStr = eData.toISOString().slice(0, 10);
+      return eDataStr === data;
+    });
+  }
+
+  setFiltered(dataFiltrada);
+};
+
 
   // Ação chamada ao clicar no botão editar da tabela
   const handleEdit = (expense) => {
